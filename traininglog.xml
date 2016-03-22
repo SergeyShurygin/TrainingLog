@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="ru-RU">
+  <Title Text="Dashboard" />
+  <DataSources>
+    <ExcelDataSource Name="Data Source 1" FileName="traininglog.xls" ComponentName="dashboardExcelDataSource1">
+      <Options Type="DevExpress.DataAccess.Excel.ExcelSourceOptions" SkipEmptyRows="true" UseFirstRowAsHeader="true" SkipHiddenColumns="true" SkipHiddenRows="true">
+        <ImportSettings Type="DevExpress.DataAccess.Excel.ExcelWorksheetSettings" WorksheetName="Sheet1" />
+      </Options>
+      <Schema>
+        <FieldInfo Name="Column1" Type="System.Double" Selected="true" />
+        <FieldInfo Name="Дата" Type="System.DateTime" Selected="true" />
+        <FieldInfo Name="Название" Type="System.String" Selected="true" />
+        <FieldInfo Name="Тип активности" Type="System.String" Selected="true" />
+        <FieldInfo Name="DIST" Type="System.Double" Selected="true" />
+        <FieldInfo Name="TM" Type="System.DateTime" Selected="true" />
+        <FieldInfo Name="AVS темп" Type="System.Double" Selected="true" />
+        <FieldInfo Name="Темп бег" Type="System.String" Selected="true" />
+        <FieldInfo Name="MAX темп" Type="System.Double" Selected="true" />
+        <FieldInfo Name="AVS PULSE" Type="System.Double" Selected="true" />
+        <FieldInfo Name="MAX PULSE" Type="System.Double" Selected="true" />
+        <FieldInfo Name="KCAL" Type="System.Double" Selected="true" />
+        <FieldInfo Name="1" Type="System.Double" Selected="true" />
+        <FieldInfo Name="2" Type="System.Double" Selected="true" />
+        <FieldInfo Name="3" Type="System.Double" Selected="true" />
+        <FieldInfo Name="4" Type="System.Double" Selected="true" />
+        <FieldInfo Name="ODO" Type="System.Double" Selected="true" />
+        <FieldInfo Name="Утренний пульс в покое." Type="System.Double" Selected="true" />
+        <FieldInfo Name="НАБОР ВЫСОТ" Type="System.Double" Selected="true" />
+      </Schema>
+      <CalculatedFields>
+        <CalculatedField Name="Дата недели" Expression="AddDays([Дата], - GetDayOfWeek([Дата]) + 1)" DataType="DateTime" />
+        <CalculatedField Name="Продолжительность" Expression="GetHour([TM]) + GetMinute([TM]) / 60.0" DataType="Decimal" />
+        <CalculatedField Name="Средняя скорость/темп" Expression="Iif([AVS темп] &lt; 1, [AVS темп] * 24, [AVS темп])" DataType="Decimal" />
+      </CalculatedFields>
+    </ExcelDataSource>
+  </DataSources>
+  <Parameters>
+    <Parameter Name="param" Value="SubName1" />
+  </Parameters>
+  <Items>
+    <Card ComponentName="cardDashboardItem1" Name="Общая статистика" DataSource="dashboardExcelDataSource1" ContentArrangementMode="FixedRowCount" ContentLineCount="1">
+      <InteractivityOptions IgnoreMasterFilters="true" MasterFilterMode="Multiple" />
+      <DataItems>
+        <Dimension DataMember="Тип активности" UniqueName="DataItem0" />
+        <Measure DataMember="DIST" UniqueName="DataItem1" />
+        <Measure DataMember="Продолжительность" UniqueName="DataItem2">
+          <NumericFormat FormatType="Number" />
+        </Measure>
+        <Dimension DataMember="Дата недели" DateTimeGroupInterval="DayMonthYear" UniqueName="DataItem3" />
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension UniqueName="DataItem0" />
+      </SeriesDimensions>
+      <Card Name="Дистанция">
+        <ActualValue UniqueName="DataItem1" />
+      </Card>
+      <Card Name="Продолжительность">
+        <ActualValue UniqueName="DataItem2" />
+      </Card>
+      <SparklineArgument UniqueName="DataItem3" />
+    </Card>
+    <Chart ComponentName="chartDashboardItem1" Name="Chart 1" ShowCaption="false" DataSource="dashboardExcelDataSource1">
+      <ColoringOptions MeasuresColoringMode="None" />
+      <InteractivityOptions IgnoreMasterFilters="true" MasterFilterMode="Multiple" />
+      <DataItems>
+        <Dimension DataMember="Тип активности" UniqueName="DataItem3" />
+        <Measure DataMember="Продолжительность" UniqueName="DataItem2">
+          <NumericFormat FormatType="Number" />
+        </Measure>
+        <Measure DataMember="DIST" UniqueName="DataItem1" />
+        <Dimension DataMember="Дата недели" UniqueName="DataItem5" />
+        <Dimension DataMember="Дата" DateTimeGroupInterval="WeekOfYear" UniqueName="DataItem0" />
+        <Measure DataMember="НАБОР ВЫСОТ" UniqueName="DataItem4">
+          <NumericFormat FormatType="Number" />
+        </Measure>
+      </DataItems>
+      <SeriesDimensions>
+        <SeriesDimension UniqueName="DataItem3" />
+      </SeriesDimensions>
+      <Arguments>
+        <Argument UniqueName="DataItem5" />
+        <Argument UniqueName="DataItem0" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <AxisY Title="Дистанция" />
+          <SecondaryAxisY Title="Км" />
+          <Series>
+            <Simple Name="Дистанция" SeriesType="StackedBar">
+              <Value UniqueName="DataItem1" />
+            </Simple>
+          </Series>
+        </Pane>
+        <Pane Name="Pane 2">
+          <AxisY Title="Часы" />
+          <Series>
+            <Simple Name="Продолжительность" SeriesType="StackedBar">
+              <Value UniqueName="DataItem2" />
+            </Simple>
+          </Series>
+        </Pane>
+        <Pane Name="Pane 3">
+          <AxisY Title="Набор высот" />
+          <Series>
+            <Simple Name="Набор высоты" SeriesType="StackedBar">
+              <Value UniqueName="DataItem4" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+      <AxisX Visible="false" />
+    </Chart>
+    <Grid ComponentName="gridDashboardItem1" Name="Grid 1" ShowCaption="false" DataSource="dashboardExcelDataSource1">
+      <DataItems>
+        <Dimension DataMember="Название" UniqueName="DataItem2" />
+        <Dimension DataMember="Дата" DateTimeGroupInterval="DayMonthYear" UniqueName="DataItem3">
+          <DateTimeFormat DateFormat="Long" DateHourFormat="Short" DateHourMinuteFormat="Short" ExactDateFormat="Minute" />
+        </Dimension>
+        <Dimension DataMember="TM" DateTimeGroupInterval="DateHourMinuteSecond" UniqueName="DataItem4">
+          <DateTimeFormat DateHourFormat="TimeOnly" DateTimeFormat="TimeOnly" ExactDateFormat="Hour" />
+        </Dimension>
+        <Measure DataMember="НАБОР ВЫСОТ" UniqueName="DataItem6">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" />
+        </Measure>
+        <Measure DataMember="1" UniqueName="DataItem1" />
+        <Measure DataMember="2" UniqueName="DataItem8" />
+        <Measure DataMember="3" UniqueName="DataItem9" />
+        <Measure DataMember="4" UniqueName="DataItem10" />
+        <Measure DataMember="MAX PULSE" UniqueName="DataItem11" />
+        <Measure DataMember="DIST" UniqueName="DataItem5">
+          <NumericFormat FormatType="Number" Precision="0" Unit="Ones" />
+        </Measure>
+        <Measure DataMember="AVS PULSE" UniqueName="DataItem7" />
+        <Measure DataMember="Средняя скорость/темп" UniqueName="DataItem0">
+          <NumericFormat FormatType="Number" Precision="1" Unit="Ones" />
+        </Measure>
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn Name="Дата" Weight="72.9767987031017">
+          <Dimension UniqueName="DataItem3" />
+        </GridDimensionColumn>
+        <GridDimensionColumn Weight="154.67908420766122">
+          <Dimension UniqueName="DataItem2" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Дистанция" Weight="61.078407610204678">
+          <Measure UniqueName="DataItem5" />
+          <Totals>
+            <Total Type="Auto" />
+          </Totals>
+        </GridMeasureColumn>
+        <GridDimensionColumn Name="Продолжительность" Weight="92.014224451736922">
+          <Dimension UniqueName="DataItem4" />
+        </GridDimensionColumn>
+        <GridMeasureColumn Name="Ср. скорость" Weight="69.0106683388027">
+          <Measure UniqueName="DataItem0" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="Набор высот" Weight="64.251311901643888">
+          <Measure UniqueName="DataItem6" />
+          <Totals>
+            <Total Type="Auto" />
+          </Totals>
+        </GridMeasureColumn>
+        <GridMeasureColumn Weight="53.939372954466471">
+          <Measure UniqueName="DataItem7" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="Макс. пульс" Weight="54.732599027326273">
+          <Measure UniqueName="DataItem11" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="1" Weight="23.796782185794033">
+          <Measure UniqueName="DataItem1" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="2" Weight="23.003556112934231">
+          <Measure UniqueName="DataItem8" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="3" Weight="23.003556112934231">
+          <Measure UniqueName="DataItem9" />
+        </GridMeasureColumn>
+        <GridMeasureColumn Name="4" Weight="19.037425748635226">
+          <Measure UniqueName="DataItem10" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions ColumnWidthMode="Manual" />
+    </Grid>
+    <ScatterChart ComponentName="scatterChartDashboardItem1" Name="Scatter Chart 1" ShowCaption="false" DataSource="dashboardExcelDataSource1">
+      <InteractivityOptions MasterFilterMode="Multiple" />
+      <DataItems>
+        <Measure DataMember="AVS PULSE" Name="Средний пульс" SummaryType="Average" UniqueName="DataItem0" />
+        <Dimension DataMember="Тип активности" ColoringMode="Hue" UniqueName="DataItem1" />
+        <Measure DataMember="Средняя скорость/темп" Name="Средняя скорость/темп" SummaryType="Average" UniqueName="DataItem2">
+          <NumericFormat FormatType="Number" Unit="Ones" />
+        </Measure>
+        <Dimension DataMember="Дата" DateTimeGroupInterval="DayMonthYear" UniqueName="DataItem3" />
+        <Measure DataMember="НАБОР ВЫСОТ" UniqueName="DataItem5" />
+      </DataItems>
+      <ChartLegend Visible="false" />
+      <MeasureX UniqueName="DataItem0" />
+      <MeasureY UniqueName="DataItem2" />
+      <MeasureWeight UniqueName="DataItem5" />
+      <Dimensions>
+        <Dimension UniqueName="DataItem1" />
+        <Dimension UniqueName="DataItem3" />
+      </Dimensions>
+    </ScatterChart>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical">
+      <LayoutItem DashboardItem="cardDashboardItem1" Weight="22" />
+      <LayoutGroup Weight="51">
+        <LayoutItem DashboardItem="chartDashboardItem1" Weight="50" />
+        <LayoutItem DashboardItem="scatterChartDashboardItem1" Weight="50" />
+      </LayoutGroup>
+      <LayoutItem DashboardItem="gridDashboardItem1" Weight="27" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>
